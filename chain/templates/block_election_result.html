@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+	{{block.super}}
+	<script src="{% static 'chartsjs/2.8.0/js/Chart.bundle.min.js' %}"></script>
+{% endblock%}
+
+{% block breadcrumb %}
+	<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+				<li class="breadcrumb-item">Election</li>
+				<li class="breadcrumb-item active" aria-current="page">Results</li>
+			</ol>
+	</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+<style>
+    .breadcrumb{
+        background-color:#383636;
+        color:#ffffff;
+    }
+</style>
+
+	<div class="row">
+	{% for position in positions %}
+			<div class="col-md-6">
+				<canvas id="chart_position_{{ forloop.counter0 }}" width="400" height="400" title="{{position.description}}"></canvas>
+			</div>
+			{% if forloop.last %}
+				</div>
+			{% else %}
+				{% if forloop.counter|divisibleby:"2" %}
+					</div><div class="row">
+				{% endif %}
+			{% endif %}
+	{% endfor %}
+
+
+
+<script>
+	function drawChart(elementId, data) {
+		var ctx = document.getElementById(elementId).getContext('2d');
+		var chart_title = $("#"+elementId).attr("title");
+		var chart_quantity = [];
+		var chart_candidate = [];
+		var jsonObj = JSON.parse(data);
+		for (i=0; i < jsonObj.length; i++) {
+			chart_quantity.push(jsonObj[i].quantity);
+			chart_candidate.push(jsonObj[i].candidate__name);
+		}
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: chart_candidate,
+				datasets: [{
+					label:'',
+					data: chart_quantity,
+					backgroundColor:["rgba(230, 25, 75, 0.2)", "rgba(60, 180, 75, 0.2)", "rgba(255, 225, 25, 0.2)", "rgba(0, 130, 200, 0.2)", "rgba(245, 130, 48, 0.2)", "rgba(145, 30, 180, 0.2)", "rgba(70, 240, 240, 0.2)", "rgba(240, 50, 230, 0.2)", "rgba(210, 245, 60, 0.2)", "rgba(250, 190, 190, 0.2)", "rgba(0, 128, 128, 0.2)", "rgba(230, 190, 255, 0.2)", "rgba(170, 110, 40, 0.2)", "rgba(255, 250, 200, 0.2)", "rgba(128, 0, 0, 0.2)", "rgba(170, 255, 195, 0.2)", "rgba(128, 128, 0, 0.2)", "rgba(255, 215, 180, 0.2)", "rgba(0, 0, 128, 0.2)", "rgba(128, 128, 128, 0.2)", "rgba(0, 0, 0, 0.2)"],
+					borderColor:["rgb(230, 25, 75)", "rgb(60, 180, 75)", "rgb(255, 225, 25)", "rgb(0, 130, 200)", "rgb(245, 130, 48)", "rgb(145, 30, 180)", "rgb(70, 240, 240)", "rgb(240, 50, 230)", "rgb(210, 245, 60)", "rgb(250, 190, 190)", "rgb(0, 128, 128)", "rgb(230, 190, 255)", "rgb(170, 110, 40)", "rgb(255, 250, 200)", "rgb(128, 0, 0)", "rgb(170, 255, 195)", "rgb(128, 128, 0)", "rgb(255, 215, 180)", "rgb(0, 0, 128)", "rgb(128, 128, 128)", "rgb(0, 0, 0)"],
+					barPercentage: 1.0,
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true,
+							stepSize: 1
+						}
+					}]
+				},
+				title: {
+            		display: true,
+            		text: chart_title
+        		},
+				legend: {
+        			display: false
+    			}
+			}
+		});
+	}
+
+	$( document ).ready(function() {
+    	var results_data = JSON.parse('{{ results_data | escapejs }}');
+		var i;
+		for(i=0; i < results_data.length; i++) {
+			var elementId = "chart_position_" + i;
+			drawChart(elementId, results_data[i]);
+		}
+	});
+
+
+</script>
+{% endblock content %}

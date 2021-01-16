@@ -1,0 +1,6 @@
+# only run "chain.cron.BlockChainCronJob"
+$ python manage.py runcrons "chain.cron.BlockChainCronJob"
+
+
+crontab -e
+* * * * * /home/fabio/workspace_python/ballotblock/doc/ballotblock.sh

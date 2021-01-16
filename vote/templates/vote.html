@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    {% if positions %}
+        <form id="id_positions_form" class="form-horizontal" method="POST">
+            <input id="id_quantity_of_positions" type="hidden" value="{{quantity_of_positions}}">
+            {% csrf_token %}
+            {% for p in positions %}
+                <div class="form-group">
+                    <strong>{{forloop.counter}}. {{p.description}}</strong>
+                    {% for c in p.candidate_set.all|dictsort:"name"%}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="position{{p.id}}" id="candidate{{c.id}}" value="{{c.id}}" required>
+                        <label class="form-check-label" for="candidate{{c.id}}">
+                            {{c.name}}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Vote</button>
+        </form>
+    {% endif %}
+
+{% endblock content %}

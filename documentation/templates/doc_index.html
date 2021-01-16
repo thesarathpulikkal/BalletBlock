@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item">About</li>
+      <li class="breadcrumb-item active" aria-current="page">Documentation</li>
+    </ol>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+<style media="screen">
+    .breadcrumb{
+        background-color:#383636;
+        color:#ffffff;
+    }
+    .jumbotron{
+        /* background-color:#a46843; */
+        background-color:#383636;
+        color:#ffffff;
+    }
+
+
+        .button {
+      border-radius: 4px;
+      background-color: #1C15E6;
+      border: none;
+      color: #FFFFFF;
+      text-align: center;
+      align:center;
+      font-size: 28px;
+      padding: 20px;
+      width: 600px;
+      transition: all 0.5s;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .button span {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: 0.5s;
+    }
+
+    .button span:after {
+      content: '\00bb';
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      right: -20px;
+      transition: 0.5s;
+    }
+
+    .button:hover span {
+      padding-right: 25px;
+    }
+
+    .button:hover span:after {
+      opacity: 1;
+      right: 0;
+    }
+    a{
+        color:#ffffff;
+    }
+    .jump{
+        text-align:center;
+    }
+
+
+</style>
+
+<div class="jumbotron text-center">
+    <h1>Documentation</h1>
+</div>
+
+<div class="jump"">
+    <button class="button"><span><a href="https://gitlab.com/fabio.ribeiro.santiago/balletblock/wikis/Home">CLICK HERE FOR DOCUMENTATION</a></span></button><br><br><br>
+</div>
+
+
+
+<!-- <div class="container">
+    <h1><u>Table of Contents</u></h1>
+    <ol>
+        <h2><li><a href="https://gitlab.com/fabio.ribeiro.santiago/ballotblock/wikis/INTRODUCTION">Introduction</a></li></h2>
+        <h2><li><a href="https://gitlab.com/fabio.ribeiro.santiago/ballotblock/wikis/INSTALLATION-PROCESS">Installation Process</a></li></h2>
+        <h2><li><a href="https://gitlab.com/fabio.ribeiro.santiago/ballotblock/wikis/CONFIGURATIONS-OF-THE-PROJECT">Configurations</a></li></h2>
+        <h2><li><a href="https://gitlab.com/fabio.ribeiro.santiago/ballotblock/wikis/View-For-the-Admin-(WHEN-ELECTION-IS-NOT-OCCURRING)">Admin View</a></li></h2>
+    </ol>
+</div> -->
+<!--
+
+
+
+<div class="jumbotron" style="background-color:#ec4d37">
+
+<h2><u>CONFIGURATIONS</u></h2><br>
+<ul>
+  <li><h4>Description: The admin can give the description of the election as to tell what is the election being held for.</h4></li>
+  <br>
+  <li><h4>Start Time: The admin can set the start time of the election himself by going into Home/Election/Election Configuration.</h4></li>
+  <br>
+  <li><h4>End Time: The admin can also set the time when the election should end by navigation to Home/Election/Election Configuration.</h4></li>
+  <br>
+  <li><h4>Block Time Generation: It is the time in minutes after which each block is generated. For Example:- 15, would mean that after first block of blockchain is generated it will wait for 15 minutes to generated the next block.</h4></li>
+  <br>
+  <li><h4>Guess Rate: This parameter was kept to make sure in every block there are enough different number of votes for different canidates. So, that the probability for a viewer of the block to guess which candidate got the highest votes is defined here. For example, if the the guess rate is 0.3, it means a new block will only be generated if the guess rate is less than or equal to 0.3. If a situation arrives that the guess rate if greater than given value but the time generation given is up than the block will be generated but the candidate list will not be shown so as the viewer of the block cannot guess who voted for who.</h4></li>
+  <br>
+  <li><h4>Minimum Votes in a Block:This is another parameter that will be checked to generate next block. A new block will be generated when on of the parameters from minimum number of votes and Block time generation is met. </h4></li>
+  <br>
+  <li><h4>Minimum votes in last block:This parameter make sure that the the last block of the block chain is not generated until the election end. </h4></li>
+  <br>
+  <li><h4>Attendance Rate:This parameter gives us a rough idea of how many people are expected to vote and this also helps together with the "Minimum votes in last block" to generate the last block. </h4></li>
+</ul>
+</div>
+
+<div class="jumbotron">
+    <h2><u>FOR ADMIN</u></h2><br>
+    <h3><u>WHEN ELECTION IS OCCURRING</u></h3><br>
+    <ul>
+        <li><h4>Block Chain:This shows all the current blocks generated.This is available under Election/Block Chain</h4></li><br>
+        <li><h4>Configuration:The configurations set for the on going election cane be seen but cannot be changed when the election is occuring.This is available under Election/Configurations</h4></li><br>
+        <li><h4>Electors:This is the list of users that are registered with the ballot are are allowed to cast their vote.</h4></li><br>
+        <li><h4>Candidates:This is the list of candidates standing for a position in the election.</h4></li><br>
+        <li><h4>Position:This is the list of positions available for the candidates to stand for.</h4></li><br>
+        <li><h4>Development Team:This hold the information of who has worked on this project.This can be found under About/Development Team</h4></li><br>
+        <li><h4>Documentation:This is a document that can be refered if there is any problem at any point.This can be found under About/Documentation</h4></li><br>
+    </ul>
+    <h3><u>WHEN ELECTION IS NOT OCCURING</u></h3><br>
+    <ul>
+        <li><h4>Block Chain:This will not show anything as the election is not occurring right now.This is available under Election/Block Chain</h4></li><br>
+        <li><h4>Configuration:The admin can set the configurations for the next election he or she wants to conduct.This is available under Election/Configurations.</h4></li><br>
+        <li><h4>Start Election:After the configuration is set, the election cane be started manually from here. If it is not started manually then it will start automatically when the start time is reached.This is available under Election/Start Election</h4></li><br>
+        <li><h4>Results:After the election is done the result for the last election can be checked from here and the winners can be decided accordingly. This is available under Election/Results</h4></li><br>
+        <li><h4>Clean:This function cleans up the record for the previous election.This is available under Election/Clean.</h4></li><br>
+        <li><h4>Mock Election:This is provided to generated dummy electors,candidates and positions to test for a dummy election. This is available under Election/Mock Election</h4></li><br>
+        <li><h4>Electors:This is the list of users that are registered with the ballot are are allowed to cast their vote.</h4></li><br>
+        <li><h4>Candidates:This is the list of candidates standing for a position in the election.</h4></li><br>
+        <li><h4>Position:This is the list of positions available for the candidates to stand for.</h4></li><br>
+        <li><h4>Development Team:This hold the information of who has worked on this project.This can be found under About/Development Team</h4></li><br>
+        <li><h4>Documentation:This is a document that can be referred if there is any problem at any point.This can be found under About/Documentation</h4></li>
+    </ul>
+</div>
+
+<div class="jumbotron" style="background-color:#ec4d37">
+    <h3><u>FOR THE ELECTOR</u></h3><br>
+    <ul>
+        <p><h3>Electors can login with their username and password, which when successfully done will take them directly to the voting page where the positions along with the candidates standing for that particular position are available. The elector can cast their vote by selecting the appopriate choice and then hit SAVE/VOTE option. If everything goes well the votes will be saved. If by any chance the election is not occuring yet the a message will appeare "Election is not yet open".<h3></p>
+    </ul>
+</div>
+
+<div class="jumbotron">
+    <h2><u>WHAT IS IN THE BLOCK</u></h2><br>
+    <ul>
+        <li><h4>Parent Hash:</h4></li><br>
+        <li><h4>Database Hash:This is the hash of the database which is calculated using ________ algorithm. It is used for the validation of the block.</h4></li><br>
+        <li><h4>Source Code Hash:This is the hash of the source code which is calculated using ________ algorithm. It is used for the validation of the block.</h4></li><br>
+        <li><h4>Election Results: It shows the candidate id and the quantity of votes recevied in this particular block.</h4></li><br>
+        <li><h4>Electors Who Voted:Shows the id's of the electors who have voted in between the period of the last block generated nad the current block. </h4></li><br>
+        <li><h4>Total Votes:This display the total number of votes in the current block. </h4></li><br>
+        <li><h4>Block Generated Time:Displays the time hwne this block was genearted.</h4></li><br>
+        <li><h4>Block hash:</h4></li><br>
+    </ul>
+</div>
+
+<div class="jumbotron" style="background-color:#ec4d37">
+    <h2><u>ALGORITHM USED FOR HASHING</u></h2><br>
+    <ul>
+        <p><h3>Info of algo</h3></p>
+    </ul>
+</div> -->
+{% endblock content %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script>
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        $( document ).ready(function() {
+            $('#id_start_time').datetimepicker({
+                format:'Y-m-d H:i',
+                beforeShow: function(i) { if ($(i).attr('readonly')) { return false; } }
+            });
+
+            $('#id_end_time').datetimepicker({
+                format:'Y-m-d H:i',
+                beforeShow: function(i) { if ($(i).attr('readonly')) { return false; } }
+            });
+
+            if (!$('#id_start_time').val() && !$('#id_start_time').is('[readonly]')) {
+                var now = new Date();
+                now.setDate(now.getDate() + 1);
+                $('#id_start_time').val(now.toISOString().substring(0,10) + ' 00:00');
+            } else {
+                $('#id_start_time').val($('#id_start_time').val());
+            }
+            if (!$('#id_end_time').val() && !$('#id_end_time').is('[readonly]')) {
+                var tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 2);
+                $('#id_end_time').val(tomorrow.toISOString().substring(0,10) + ' 00:00');
+            } else {
+                $('#id_end_time').val($('#id_end_time').val());
+            }
+
+        });
+    </script>
+
+{% endblock extrahead %}
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="breadcrumb-item">Election</li>
+          <li class="breadcrumb-item active" aria-current="page">Election Configuration</li>
+        </ol>
+    </nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<style>
+    .breadcrumb{
+        background-color:#383636;
+        color:#ffffff;
+    }
+</style>
+    <form method="post" action="{{ request.path }}">
+        {% crispy form %}
+
+        {% if not election_is_locked %}
+            <input type="submit" class="btn btn-primary" value="Save">
+        {% endif %}
+
+    </form>
+
+{% endblock content %}
