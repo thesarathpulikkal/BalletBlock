@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% block extrahead %}
+<style>
+    .card {font-family: monospace; font-size: 13px;}
+</style>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+{% endblock extrahead %}
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item">Election</li>
+            <li class="breadcrumb-item active" aria-current="page">Block Chain</li>
+        </ol>
+    </nav>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+<style>
+    .breadcrumb{
+        background-color:#383636;
+        color:#ffffff;
+    }
+</style>
+{% for bblock in bblock_list %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mb-3">
+                <div class="card">
+                    <div class="card-header text-white bg-secondary">Parent hash: {{bblock.parent_hash}}</div>
+                    
+                        <ul class="list-group text-white bg-success">
+                            {% if bblock.hash_of_database_hash == genesis_block.hash_of_database_hash %}
+                            <li class="list-group-item text-white bg-success">
+                            {% else %}
+                            <li class="list-group-item text-white bg-danger">
+                            {% endif %}
+                                <h6 class="card-subtitle">Database hash:</h6>
+                                <a href="{% url 'database_hash' bblock_id=bblock.id %}" class="text-white" target="_blank">
+                                    {{bblock.hash_of_database_hash }}
+                                </a>
+                            </li>
+                            {% if bblock.hash_of_source_code_hash == genesis_block.hash_of_source_code_hash %}
+                            <li class="list-group-item text-white bg-success">
+                            {% else %}
+                            <li class="list-group-item text-white bg-danger">
+                            {% endif %}
+                                <h6 class="card-subtitle">Source code hash:</h6>
+                                <a href="{% url 'source_code_hash' bblock_id=bblock.id %}" class="text-white" target="_blank">
+                                    {{bblock.hash_of_source_code_hash }}
+                                </a>
+                            </li>
+                            <li class="list-group-item text-white bg-info">
+                                <h6 class="card-subtitle">Election results:</h6>
+                                <a href="{% url 'block_election_result' bblock_id=bblock.id %}" class="text-white" target="_blank">
+                                  {{bblock.candidate_votes}}
+                                </a>
+                            </li>
+                            <li class="list-group-item text-white bg-info">
+                                <h6 class="card-subtitle">Electors who voted:</h6>
+                                {{bblock.electors}}
+                            </li>
+                            <li class="list-group-item text-white bg-info">
+                                <h6 class="card-subtitle">Reason:</h6>
+                                {{bblock.reason}}
+                            </li>
+                            <li class="list-group-item text-white bg-info">
+                                Total of votes: {{bblock.total_votes}}
+                            </li>
+                            <li class="list-group-item text-white bg-info">
+                                Block generated time: {{bblock.timestamp_iso}}
+                            </li>
+                        </ul>
+                    
+                    <div class="card-footer text-white bg-secondary">Block hash: {{bblock.block_hash}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+
+<div class="row">
+<div class="col-md-12">
+  <ul class="pagination">
+    {% if bblock_list.has_previous %}
+      <li class="page-item">
+        <a href="?page={{ bblock_list.previous_page_number }}"
+           class="page-link previous">&laquo;</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link previous">&laquo;</span>
+      </li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if i == bblock_list.number %}
+        <li class="page-item active">
+          <span class="page-link">{{ i }}</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+    {% if bblock_list.has_next %}
+      <li class="page-item">
+        <a href="?page={{ bblock_list.next_page_number }}"
+           class="page-link next">&raquo;</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link next">&raquo;</span>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+</div>
+{% if bblock_list|length > 0 %}
+<div class="row" style="margin-bottom: 25px;">
+    <div class="col-md-12">
+        <a href="{% url 'block_add' %}" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="This button should no exists in a real application">Add Block</a>
+        <a href="{% url 'validate_chain' %}" class="btn btn-secondary">Validate Chain</a>
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock content %}

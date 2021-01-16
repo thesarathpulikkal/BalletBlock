@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">About us</li>
+    </ol>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+<style>
+    .breadcrumb{
+        background-color:#383636;
+        color:#ffffff;
+    }
+    .jumbotron{
+        background-color:#383636;
+        color:#ffffff;
+    }
+</style>
+<div class="jumbotron">
+    <h1 class="jump text-center">Development Team</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+  <table class="table table-stripes table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Student ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-danger">
+          <td>104934797</td>
+          <td>Fabio Ribeiro Santiago</td>
+          <td>santia11@uwindsor.ca</td>
+        </tr>
+        <tr class="table-success">
+          <td>105099194</td>
+          <td>Sarath Pulikkal</td>
+          <td>pulikka@uwindsor.ca</td>
+        </tr>
+        <tr class="table-info">
+          <td>105146209</td>
+          <td>Munish</td>
+          <td >munish@uwindsor.ca</td>
+        </tr>
+      </tbody>
+  </table>
+</div>
+</div>
+{% endblock content %}

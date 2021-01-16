@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<style>
+    .jumbotron{
+        background-color:#383636;
+        color:#ffffff;
+    }
+
+    .button {
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  align:center;
+  font-size: 28px;
+  padding: 20px;
+  width: 300px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+a{
+    color: #FFFFFF;
+}
+.jump{
+    text-align:center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+<div class="overlay">
+
+
+{% if request.user.is_superuser %}
+<div class="jumbotron">
+    <h1 class="jump text-center">“The ballot is stronger than the bullet.” – Abraham Lincoln </h1>
+</div>
+{% else %}
+<div class="jumbotron jumbotron-fluid">
+    <h1 class="jump text-center">“The ballot is stronger than the bullet.” – Abraham Lincoln </h1>
+</div>
+<div class="jump"">
+    <button class="button"><span><a href="{% url 'vote' %}">VOTE HERE </a></span></button><br><br><br>
+</div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="{% static "images/main.jpg"%}" alt="Image not found" style="width:100%">
+  </div>
+  <div class="column">
+    <img src="{% static "images/voted.jpg"%}" alt="Image not found" style="width:100%">
+  </div>
+  <div class="column">
+    <img src="{% static "images/main.jpg"%}" alt="Image not found" style="width:100%">
+  </div>
+</div>
+
+{% endif %}
+{% endblock content %}

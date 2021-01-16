@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block extrahead %}
+<style>
+    .card {font-family: monospace; font-size: 13px;}
+    .hash {font-family: monospace; font-size: 13px;}
+</style>
+{% endblock extrahead %}
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item">Election</li>
+            <li class="breadcrumb-item">Block Chain</li>
+            <li class="breadcrumb-item active" aria-current="page">Database Hash</li>
+        </ol>
+    </nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+<!-- Block -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-3">
+            <div class="card text-white bg-success">
+                <div class="card-header">Parent hash: {{bblock.parent_hash}}</div>
+                    <ul class="list-group text-white bg-success">
+                        {% if bblock.hash_of_database_hash == genesis_block.hash_of_database_hash %}
+                        <li class="list-group-item text-white bg-success hash">
+                        {% else %}
+                        <li class="list-group-item text-white bg-danger hash">
+                        {% endif %}
+                            <h6 class="card-subtitle">Database hash:</h6>
+                            {{bblock.hash_of_database_hash }}
+                        </li>
+                    </ul>
+                <div class="card-footer">Block hash: {{bblock.block_hash}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#beautiful_data">Beautiful data</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#raw_data">Raw data</a>
+    </li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade show active" id="beautiful_data">
+        <!-- Election config table -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>election_config</h3>
+                <table id="id_election_config_table" class="table table-striped table-sm">
+                    <thead class="thead-dark">
+                        <th>id</th>
+                        <th>description</th>
+                        <th>start_time</th>
+                        <th>end_time</th>
+                        <th>block_time_generation</th>
+                        <th>min_votes_in_block</th>
+                        <th>min_votes_in_last_block</th>
+                        <th>attendance_rate</th>
+                        <th>locked</th>
+                    </thead>
+                    <tbody>
+                    {% for ec in database_hash_dict.database.election_config %}
+                        <tr>
+                            <td>{{ec.id}}</td>
+                            <td>{{ec.description}}</td>
+                            <td>{{ec.start_time}}</td>
+                            <td>{{ec.end_time}}</td>
+                            <td>{{ec.block_time_generation}}</td>
+                            <td>{{ec.min_votes_in_block}}</td>
+                            <td>{{ec.min_votes_in_last_block}}</td>
+                            <td>{{ec.attendance_rate}}</td>
+                            <td>{{ec.locked}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        {% if genesis_database_hash_dict.election_config_hash == database_hash_dict.election_config_hash %}
+                        <tr class="table-success hash">
+                        {% else %}
+                        <tr class="table-danger hash">
+                        {% endif %}
+                            <td colspan="9">{{database_hash_dict.database.election_config_hash}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- Positions table -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>positions</h3>
+                <table id="id_positions_table" class="table table-striped table-sm">
+                    <thead class="thead-dark">
+                        <th>id</th>
+                        <th>description</th>
+                        <th>quantity</th>
+                    </thead>
+                    <tbody>
+                    {% for p in database_hash_dict.database.positions %}
+                        <tr>
+                            <td>{{p.id}}</td>
+                            <td>{{p.description}}</td>
+                            <td>{{p.quantity}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        {% if genesis_database_hash_dict.positions_hash == database_hash_dict.positions_hash %}
+                        <tr class="table-success hash">
+                        {% else %}
+                        <tr class="table-danger hash">
+                        {% endif %}
+                            <td colspan="3">{{database_hash_dict.database.positions_hash}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- Candidates table -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>candidates</h3>
+                <table id="id_candidates_table" class="table table-striped table-sm">
+                    <thead class="thead-dark">
+                        <th>id</th>
+                        <th>name</th>
+                        <th>position_id</th>
+                    </thead>
+                    <tbody>
+                    {% for c in database_hash_dict.database.candidates %}
+                        <tr>
+                            <td>{{c.id}}</td>
+                            <td>{{c.name}}</td>
+                            <td>{{c.position_id}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        {% if genesis_database_hash_dict.database.candidates_hash == database_hash_dict.database.candidates_hash %}
+                        <tr class="table-success hash">
+                        {% else %}
+                        <tr class="table-danger hash">
+                        {% endif %}
+                            <td colspan="3">{{database_hash_dict.database.candidates_hash}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- Electors table -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>electors</h3>
+                <table id="id_electors_table" class="table table-striped table-sm">
+                    <thead class="thead-dark">
+                        <th>id</th>
+                        <th>user_id</th>
+                    </thead>
+                    <tbody>
+                    {% for e in database_hash_dict.database.electors %}
+                        <tr>
+                            <td>{{e.id}}</td>
+                            <td>{{e.user_id}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        {% if genesis_database_hash_dict.electors_hash == database_hash_dict.electors_hash %}
+                        <tr class="table-success hash">
+                        {% else %}
+                        <tr class="table-danger hash">
+                        {% endif %}
+                            <td colspan="3">{{database_hash_dict.database.electors_hash}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- Users -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>users</h3>
+                <table id="id_users_table" class="table table-striped table-sm">
+                    <thead class="thead-dark">
+                        <th>id</th>
+                        <th>first_name</th>
+                        <th>last_name</th>
+                        <th>email</th>
+                        <th>is_superuser</th>
+                    </thead>
+                    <tbody>
+                    {% for u in database_hash_dict.database.users %}
+                        <tr>
+                            <td>{{u.id}}</td>
+                            <td>{{u.first_name}}</td>
+                            <td>{{u.last_name}}</td>
+                            <td>{{u.email}}</td>
+                            <td>{{u.is_superuser}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        {% if genesis_database_hash_dict.users_hash == database_hash_dict.users_hash %}
+                        <tr class="table-success hash">
+                        {% else %}
+                        <tr class="table-danger hash">
+                        {% endif %}
+                            <td colspan="5">{{database_hash_dict.database.users_hash}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    <!-- End of beautiful tab content -->
+    </div>
+    <!-- Raw tab content -->
+    <div class="tab-pane fade" id="raw_data">
+        <div class="row">
+            <div class="col-md-12">
+                {{bblock.database_hash}}
+            </div>
+        </div>
+    </div>
+ </div>
+{% endblock content %}

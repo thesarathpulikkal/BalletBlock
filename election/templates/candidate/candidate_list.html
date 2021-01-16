@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load static %}
+
+
+{% block extrahead %}
+    <script>
+        $(document).ready(function() {
+            $('#candidate_table').DataTable();
+        });
+    </script>
+{% endblock extrahead %}
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Candidates</li>
+        </ol>
+    </nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+<style>
+    .breadcrumb{
+        background-color:#383636;
+        color:#ffffff;
+    }
+</style>
+    {% render_table candidate_table %}
+
+    {% if not election_is_locked %}
+    <div class="row">
+        <div class="col-md-2">
+            <a class="btn btn-primary"  href="{% url 'candidate_add' %}">Add</a>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock content %}
